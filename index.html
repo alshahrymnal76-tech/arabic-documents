@@ -1,1 +1,181 @@
-index.html
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مستندات | إنشاء ملفات PDF</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#f1f3f7;
+  color:#202938;
+}
+header{
+  background:#17365d;
+  color:white;
+  padding:25px 15px;
+  text-align:center;
+}
+header h1{margin:0;font-size:27px}
+header p{margin:10px 0 0;color:#dce6f5}
+.container{
+  max-width:750px;
+  margin:25px auto;
+  padding:15px;
+}
+.card{
+  background:white;
+  padding:22px;
+  border-radius:13px;
+  box-shadow:0 3px 15px #00000012;
+}
+h2{font-size:20px;margin-top:0}
+label{
+  display:block;
+  margin:15px 0 7px;
+  font-weight:bold;
+}
+input,textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #ccd3dd;
+  border-radius:8px;
+  font-family:inherit;
+  font-size:15px;
+}
+textarea{min-height:170px;resize:vertical}
+button{
+  border:0;
+  padding:13px 20px;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:12px 4px 0 0;
+}
+.primary{background:#17365d;color:white}
+.secondary{background:#e6edf6;color:#17365d}
+#preview{
+  background:white;
+  padding:30px;
+  margin-top:20px;
+  border:1px solid #ddd;
+  min-height:250px;
+  line-height:2;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+#preview h2{text-align:center}
+footer{
+  text-align:center;
+  color:#777;
+  padding:20px;
+}
+@media print{
+  body{background:white}
+  header,.container form,.actions,footer{display:none!important}
+  .container{margin:0;padding:0;max-width:none}
+  .card{box-shadow:none;padding:0}
+  #preview{border:0;margin:0;padding:20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>مستندات</h1>
+<p>نظام إنشاء وتجهيز المستندات بصيغة PDF</p>
+</header>
+
+<div class="container">
+<div class="card">
+
+<form id="docForm">
+<h2>إنشاء مستند جديد</h2>
+
+<label>عنوان المستند</label>
+<input id="title" placeholder="اكتب عنوان المستند">
+
+<label>اسم المرسل إليه</label>
+<input id="recipient" placeholder="الاسم">
+
+<label>التاريخ</label>
+<input id="date" type="date">
+
+<label>موضوع المستند</label>
+<input id="subject" placeholder="موضوع المستند">
+
+<label>محتوى المستند</label>
+<textarea id="content" placeholder="اكتب محتوى المستند هنا..."></textarea>
+
+<div class="actions">
+<button type="button" class="primary" onclick="updatePreview()">معاينة المستند</button>
+<button type="button" class="secondary" onclick="printDocument()">حفظ PDF / طباعة</button>
+<button type="reset" class="secondary" onclick="clearPreview()">مسح البيانات</button>
+</div>
+</form>
+
+<div id="preview">
+<h2>معاينة المستند</h2>
+<p>ستظهر بيانات مستندك هنا بعد الضغط على معاينة المستند.</p>
+</div>
+
+</div>
+</div>
+
+<footer>
+جميع الحقوق محفوظة © مستندات
+</footer>
+
+<script>
+const dateInput=document.getElementById('date');
+dateInput.value=new Date().toISOString().slice(0,10);
+
+function updatePreview(){
+const title=document.getElementById('title').value;
+const recipient=document.getElementById('recipient').value;
+const date=document.getElementById('date').value;
+const subject=document.getElementById('subject').value;
+const content=document.getElementById('content').value;
+
+const preview=document.getElementById('preview');
+preview.replaceChildren();
+
+function add(tag,text){
+const el=document.createElement(tag);
+el.textContent=text;
+preview.appendChild(el);
+}
+
+add('h2',title||'مستند جديد');
+add('p','المرسل إليه: '+(recipient||'غير محدد'));
+add('p','التاريخ: '+(date||'غير محدد'));
+add('p','الموضوع: '+(subject||'غير محدد'));
+
+const line=document.createElement('hr');
+preview.appendChild(line);
+
+const paragraph=document.createElement('p');
+paragraph.textContent=content||'محتوى المستند';
+preview.appendChild(paragraph);
+}
+
+function printDocument(){
+updatePreview();
+window.print();
+}
+
+function clearPreview(){
+setTimeout(()=>{
+document.getElementById('preview').innerHTML=
+'<h2>معاينة المستند</h2><p>ستظهر بيانات مستندك هنا.</p>';
+},0);
+}
+</script>
+
+</body>
+</html>
+
